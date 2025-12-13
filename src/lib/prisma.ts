@@ -1,7 +1,21 @@
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
-    return new PrismaClient()
+    let url = process.env.DATABASE_URL;
+
+    // Fix for Supabase Transaction Mode (PgBouncer)
+    // "prepared statement does not exist" error (Code 26000)
+    if (process.env.NODE_ENV === 'production' && url && !url.includes('pgbouncer=true')) {
+        url += (url.includes('?') ? '&' : '?') + 'pgbouncer=true';
+    }
+
+    return new PrismaClient({
+        datasources: {
+            db: {
+                url,
+            },
+        },
+    })
 }
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>
