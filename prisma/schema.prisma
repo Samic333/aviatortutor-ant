@@ -1,0 +1,329 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  STUDENT
+  INSTRUCTOR
+  ADMIN
+  SUPER_ADMIN
+  OWNER
+}
+
+enum ClassType {
+  ONE_ON_ONE
+  GROUP
+  CHAT
+}
+
+enum ClassStatus {
+  DRAFT
+  PENDING_REVIEW
+  PUBLISHED
+  ARCHIVED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+enum TicketType {
+  TECHNICAL
+  PAYMENT
+  DISPUTE
+  OTHER
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  passwordHash  String?
+  role          Role      @default(STUDENT)
+  image         String?
+  country       String?
+  timezone      String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  instructorProfile InstructorProfile?
+  studentProfile    StudentProfile?
+
+  bookings        Booking[]
+  reviewsWritten  Review[]
+  notifications   Notification[]
+  
+  // Conversations
+  conversationsCreated Conversation[] @relation("CreatedConversations")
+  conversations       Conversation[]  @relation("ConversationParticipants")
+  messagesSent        Message[]
+
+  // Support
+  ticketsCreated      SupportTicket[] @relation("TicketCreator")
+  ticketsManaged      SupportTicket[] @relation("TicketOwner")
+}
+
+model InstructorProfile {
+  id                String   @id @default(cuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  bio               String?  @db.Text
+  yearsOfExperience Int      @default(0)
+  authorities       String[] // e.g. ["FAA", "EASA"]
+  aircraftTypes     String[]
+  company           String?
+  languages         String[]
+  introVideoUrl     String?
+  hourlyRateDefault Float?
+  rating            Float    @default(0)
+  totalReviews      Int      @default(0)
+  pendingApproval   Boolean  @default(true)
+
+  airlineId         String?
+  airline           Airline? @relation(fields: [airlineId], references: [id])
+  
+  classes           Class[]
+  reviewsReceived   Review[]
+}
+
+model StudentProfile {
+  id                  String   @id @default(cuid())
+  userId              String   @unique
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  targetLicense       String?
+  authoritiesOfInterest String[]
+  goalSummary         String?  @db.Text
+  
+  certificates        Certificate[]
+}
+
+model Class {
+  id                  String   @id @default(cuid())
+  instructorId        String
+  instructor          InstructorProfile @relation(fields: [instructorId], references: [id])
+  
+  title               String
+  shortDescription    String?
+  detailedDescription String?  @db.Text
+  type                ClassType
+  authority           String?  // e.g. FAA
+  authorityStandard   String?  // e.g. ICAO, EASA, IATA (Normalized or Enum)
+  level               String?  // e.g. ATPL
+  tags                String[]
+  hasCertificate      Boolean  @default(false)
+  status              ClassStatus @default(DRAFT)
+  
+  pricePerHour        Float?
+  fixedPrice          Float?
+  currency            String   @default("USD")
+  maxSeats            Int?     // For group
+  
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  
+  sessions            ClassSession[]
+  bookings            Booking[]
+  certificates        Certificate[]
+}
+
+model ClassSession {
+  id        String   @id @default(cuid())
+  classId   String
+  class     Class    @relation(fields: [classId], references: [id], onDelete: Cascade)
+  
+  startTime DateTime
+  endTime   DateTime
+  timezone  String?
+  capacity  Int?
+  meetingUrl String?
+  status    String?  // scheduled, completed, etc.
+  
+  // Zoom Integration
+  zoomMeetingId String?
+  zoomJoinUrl   String?
+  zoomStartUrl  String?
+  zoomPassword  String?
+
+  bookings  Booking[]
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  studentId     String
+  student       User          @relation(fields: [studentId], references: [id])
+  
+  classId       String
+  class         Class         @relation(fields: [classId], references: [id])
+  
+  sessionId     String?
+  session       ClassSession? @relation(fields: [sessionId], references: [id])
+  
+  scheduledTime DateTime?     // For 1-on-1 if not using session objects loosely
+  
+  status        BookingStatus @default(PENDING)
+  paymentStatus PaymentStatus @default(PENDING)
+  price         Float
+  currency      String        @default("USD")
+  
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  review        Review?
+  supportTicket SupportTicket?
+}
+
+model Review {
+  id           String   @id @default(cuid())
+  bookingId    String   @unique
+  booking      Booking  @relation(fields: [bookingId], references: [id])
+  
+  studentId    String
+  student      User     @relation(fields: [studentId], references: [id])
+  
+  instructorId String
+  instructor   InstructorProfile @relation(fields: [instructorId], references: [id])
+  
+  rating       Int      // 1-5
+  comment      String?  @db.Text
+  createdAt    DateTime @default(now())
+}
+
+model Conversation {
+  id           String    @id @default(cuid())
+  topic        String?
+  createdById  String
+  creator      User      @relation("CreatedConversations", fields: [createdById], references: [id])
+  
+  participants User[]    @relation("ConversationParticipants")
+  messages     Message[]
+  
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  senderId       String
+  sender         User         @relation(fields: [senderId], references: [id])
+  
+  content        String       @db.Text
+  readAt         DateTime?
+  createdAt      DateTime     @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type      String   // e.g. "BOOKING_CONFIRMED"
+  title     String
+  body      String
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SupportTicket {
+  id           String         @id @default(cuid())
+  createdById  String
+  createdBy    User           @relation("TicketCreator", fields: [createdById], references: [id])
+  
+  bookingId    String?        @unique
+  booking      Booking?       @relation(fields: [bookingId], references: [id])
+  
+  type         TicketType
+  status       TicketStatus   @default(OPEN)
+  priority     TicketPriority @default(MEDIUM)
+  
+  adminOwnerId String?
+  adminOwner   User?          @relation("TicketOwner", fields: [adminOwnerId], references: [id])
+  
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+}
+
+model Certificate {
+  id              String         @id @default(cuid())
+  studentId       String
+  student         StudentProfile @relation(fields: [studentId], references: [id])
+  
+  classId         String
+  class           Class          @relation(fields: [classId], references: [id])
+  
+  issuedAt        DateTime       @default(now())
+  certificateCode String         @unique
+  metadataJson    String?        // JSON string
+}
+
+model AuditLog {
+  id           String   @id @default(cuid())
+  createdAt    DateTime @default(now())
+
+  actorId      String?
+  actorRole    String?  // Snapshot of role
+  action       String   // e.g. INSTRUCTOR_APPROVED
+  
+  entityType   String
+  entityId     String?
+  
+  targetUserId String?
+  status       String   // SUCCESS | FAIL
+  
+  ip           String?
+  userAgent    String?
+  metadata     Json?    // Diff or details
+
+  @@index([createdAt])
+  @@index([actorId, createdAt])
+  @@index([action, createdAt])
+  @@index([entityType, entityId])
+}
+
+model Airline {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  iataCode  String?
+  icaoCode  String?
+  country   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  instructors InstructorProfile[]
+  
+  @@index([name])
+}
