@@ -1,7 +1,9 @@
 import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; // Using HTML textarea in real usage if component missing
@@ -19,9 +21,14 @@ export default async function InstructorProfilePage() {
 
     return (
         <div className="max-w-3xl space-y-8">
-            <div>
-                <h1 className="text-3xl font-bold tracking-tight">Instructor Profile</h1>
-                <p className="text-muted-foreground">Manage your public profile information.</p>
+            <div className="flex justify-between items-center">
+                <div>
+                    <h1 className="text-3xl font-bold tracking-tight">My Profile</h1>
+                    <p className="text-muted-foreground">Manage your instructor details</p>
+                </div>
+                <Button asChild>
+                    <Link href="/instructor/profile/edit">Edit Profile</Link>
+                </Button>
             </div>
 
             <Card>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, MapPin, User, ChevronLeft } from "lucide-react";
+import { getCurrentUser } from "@/lib/session";
 
 export default async function ClassDetailsPage({ params }: { params: { id: string } }) {
     const cls = await prisma.class.findUnique({
@@ -16,10 +17,27 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
 
     if (!cls) notFound();
 
+    const user = await getCurrentUser(); // Imported from "@/lib/session" implicitly or need to import? 
+    // Wait, getCurrentUser is not imported in original snippet. Need to add valid import.
+    // But first, let's just use the logic replacement.
+
+    let backLink = "/classes";
+    let backLabel = "Back to Classes";
+
+    if (user) {
+        if (user.role === "INSTRUCTOR") {
+            backLink = "/instructor/classes";
+            backLabel = "Back to My Classes";
+        } else if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
+            backLink = "/admin/classes";
+            backLabel = "Back to Admin Classes";
+        }
+    }
+
     return (
         <div className="container py-8 max-w-4xl">
             <Button variant="ghost" size="sm" asChild className="mb-4">
-                <Link href="/classes"><ChevronLeft className="mr-2 h-4 w-4" /> Back to Classes</Link>
+                <Link href={backLink}><ChevronLeft className="mr-2 h-4 w-4" /> {backLabel}</Link>
             </Button>
 
             <div className="grid gap-6 md:grid-cols-3">

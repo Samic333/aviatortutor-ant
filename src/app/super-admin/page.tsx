@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { redirect } from "next/navigation";
+import Link from "next/link";
 import { Shield, Users, Settings, DollarSign } from "lucide-react";
 
 export default async function SuperAdminDashboardPage() {
@@ -75,21 +76,27 @@ export default async function SuperAdminDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     <div className="grid gap-4 md:grid-cols-3">
-                        <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <Shield className="h-6 w-6 mb-2 text-blue-600" />
-                            <h3 className="font-semibold">Manage Admins</h3>
-                            <p className="text-sm text-muted-foreground">Add or remove admin privileges</p>
-                        </div>
-                        <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <Settings className="h-6 w-6 mb-2 text-gray-600" />
-                            <h3 className="font-semibold">Platform Settings</h3>
-                            <p className="text-sm text-muted-foreground">Configure system parameters</p>
-                        </div>
-                        <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer">
-                            <DollarSign className="h-6 w-6 mb-2 text-green-600" />
-                            <h3 className="font-semibold">Financial Reports</h3>
-                            <p className="text-sm text-muted-foreground">View revenue analytics</p>
-                        </div>
+                        <Link href="/super-admin/admins" className="block">
+                            <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer h-full">
+                                <Shield className="h-6 w-6 mb-2 text-blue-600" />
+                                <h3 className="font-semibold">Manage Admins</h3>
+                                <p className="text-sm text-muted-foreground">Add or remove admin privileges</p>
+                            </div>
+                        </Link>
+                        <Link href="/super-admin/settings" className="block">
+                            <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer h-full">
+                                <Settings className="h-6 w-6 mb-2 text-gray-600" />
+                                <h3 className="font-semibold">Platform Settings</h3>
+                                <p className="text-sm text-muted-foreground">Configure system parameters</p>
+                            </div>
+                        </Link>
+                        <Link href="/super-admin/finance" className="block">
+                            <div className="p-4 border rounded-lg hover:bg-gray-50 cursor-pointer h-full">
+                                <DollarSign className="h-6 w-6 mb-2 text-green-600" />
+                                <h3 className="font-semibold">Financial Reports</h3>
+                                <p className="text-sm text-muted-foreground">View revenue analytics</p>
+                            </div>
+                        </Link>
                     </div>
                 </CardContent>
             </Card>

@@ -129,17 +129,21 @@ export default async function OwnerCommandDeckPage() {
             <div className="bg-slate-800/50 backdrop-blur-sm border border-cyan-500/20 rounded-lg p-6">
                 <h2 className="text-xl font-bold mb-4 text-cyan-400">QUICK ACTIONS</h2>
                 <div className="grid gap-4 md:grid-cols-3">
-                    <button className="bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg p-4 text-left transition-all transform hover:scale-105">
-                        <div className="font-bold mb-1">Financial Reports</div>
-                        <div className="text-xs text-cyan-100/70">View detailed analytics</div>
-                    </button>
-                    <button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-lg p-4 text-left transition-all transform hover:scale-105">
-                        <div className="font-bold mb-1">Operations Center</div>
-                        <div className="text-xs text-purple-100/70">Manage platform ops</div>
-                    </button>
-                    <button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-lg p-4 text-left transition-all transform hover:scale-105">
+                    <a href="/owner/finance" className="block">
+                        <button className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 rounded-lg p-4 text-left transition-all transform hover:scale-105">
+                            <div className="font-bold mb-1">Financial Reports</div>
+                            <div className="text-xs text-cyan-100/70">View detailed analytics</div>
+                        </button>
+                    </a>
+                    <a href="/owner/operations" className="block">
+                        <button className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 rounded-lg p-4 text-left transition-all transform hover:scale-105">
+                            <div className="font-bold mb-1">Operations Center</div>
+                            <div className="text-xs text-purple-100/70">Manage platform ops</div>
+                        </button>
+                    </a>
+                    <button className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 rounded-lg p-4 text-left transition-all transform hover:scale-105 opacity-50 cursor-not-allowed" disabled>
                         <div className="font-bold mb-1">Emergency Controls</div>
-                        <div className="text-xs text-orange-100/70">Critical actions</div>
+                        <div className="text-xs text-orange-100/70">Coming Soon</div>
                     </button>
                 </div>
             </div>

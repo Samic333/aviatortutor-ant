@@ -3,8 +3,9 @@ import { getCurrentUser } from "@/lib/session";
 import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DollarSign, BookOpen, Users, Star, Plus } from "lucide-react";
+import { DollarSign, BookOpen, Users, Star, Plus, Calendar } from "lucide-react";
 import { redirect } from "next/navigation";
+import { CompleteProfileBanner } from "@/components/shared/CompleteProfileBanner";
 
 export default async function InstructorDashboardPage() {
     const user = await getCurrentUser();
@@ -72,9 +73,11 @@ export default async function InstructorDashboardPage() {
     });
 
     const rating = instructorProfile.rating || 0;
+    const isProfileComplete = !!(instructorProfile.bio && instructorProfile.yearsOfExperience && instructorProfile.hourlyRateDefault);
 
     return (
         <div className="space-y-8">
+            {!isProfileComplete && <CompleteProfileBanner role="INSTRUCTOR" />}
             <div className="flex items-center justify-between">
                 <h2 className="text-3xl font-bold tracking-tight">Instructor Dashboard</h2>
                 <div className="flex gap-2">
@@ -136,7 +139,15 @@ export default async function InstructorDashboardPage() {
                 </CardHeader>
                 <CardContent>
                     {upcomingSessionsResult.length === 0 ? (
-                        <p className="text-sm text-muted-foreground">No sessions scheduled.</p>
+                        <div className="flex flex-col items-center justify-center py-12 text-center">
+                            <div className="bg-primary/10 p-4 rounded-full mb-4">
+                                <Calendar className="h-8 w-8 text-primary" />
+                            </div>
+                            <h3 className="font-semibold text-lg mb-2">No Upcoming Sessions</h3>
+                            <p className="text-muted-foreground max-w-sm">
+                                You don't have any sessions scheduled currently.
+                            </p>
+                        </div>
                     ) : (
                         <div className="space-y-4">
                             {upcomingSessionsResult.map(booking => (

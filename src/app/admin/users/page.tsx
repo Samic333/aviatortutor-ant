@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/session";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function AdminUsersPage() {
@@ -44,7 +45,9 @@ export default async function AdminUsersPage() {
                                         </td>
                                         <td className="px-4 py-3">{new Date(u.createdAt).toLocaleDateString()}</td>
                                         <td className="px-4 py-3">
-                                            <Button size="sm" variant="ghost">View</Button>
+                                            <Button size="sm" variant="ghost" asChild>
+                                                <Link href={`/admin/users/${u.id}`}>View</Link>
+                                            </Button>
                                         </td>
                                     </tr>
                                 ))}

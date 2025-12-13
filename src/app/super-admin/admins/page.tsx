@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { redirect } from "next/navigation";
+import { AddAdminModal } from "@/components/super-admin/AddAdminModal";
 
 export default async function SuperAdminAdminsPage() {
     const user = await getCurrentUser();
@@ -21,7 +22,7 @@ export default async function SuperAdminAdminsPage() {
                     <h1 className="text-3xl font-bold tracking-tight">Admin Management</h1>
                     <p className="text-muted-foreground">Manage administrative users and permissions</p>
                 </div>
-                <Button>Add New Admin</Button>
+                <AddAdminModal />
             </div>
 
             <Card>

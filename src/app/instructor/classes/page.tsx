@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Plus, Edit, Eye, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { redirect } from "next/navigation";
+import { ClassStatusToggle } from "@/components/instructor/ClassStatusToggle";
 
 export default async function InstructorClassesPage() {
     const user = await getCurrentUser();
@@ -51,9 +52,7 @@ export default async function InstructorClassesPage() {
                         <Card key={cls.id}>
                             <CardHeader>
                                 <div className="flex justify-between items-start">
-                                    <Badge variant={cls.status === "PUBLISHED" ? "default" : "secondary"}>
-                                        {cls.status}
-                                    </Badge>
+                                    <ClassStatusToggle classId={cls.id} initialStatus={cls.status} />
                                     <span className="font-bold text-sm">
                                         {cls.pricePerHour ? `$${cls.pricePerHour}/hr` : "Free"}
                                     </span>

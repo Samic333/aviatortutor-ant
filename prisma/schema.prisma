@@ -267,6 +267,8 @@ model SupportTicket {
   bookingId    String?        @unique
   booking      Booking?       @relation(fields: [bookingId], references: [id])
   
+  subject      String
+  description  String         @db.Text
   type         TicketType
   status       TicketStatus   @default(OPEN)
   priority     TicketPriority @default(MEDIUM)
@@ -327,4 +329,13 @@ model Airline {
   instructors InstructorProfile[]
   
   @@index([name])
+}
+
+model SystemSettings {
+  id              String   @id @default(cuid())
+  platformName    String   @default("AviatorTutor")
+  supportEmail    String   @default("support@aviatortutor.com")
+  defaultCurrency String   @default("USD")
+  maintenanceMode Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
 }
