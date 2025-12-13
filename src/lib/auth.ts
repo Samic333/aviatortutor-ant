@@ -9,6 +9,21 @@ export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
     },
+    // Trust the App Platform proxy
+    // trustHost: true, // Removed due to type error in NextAuth v4. Relying on NEXTAUTH_URL.
+
+    // Secure cookies for production
+    cookies: {
+        sessionToken: {
+            name: process.env.NODE_ENV === 'production' ? '__Secure-next-auth.session-token' : 'next-auth.session-token',
+            options: {
+                httpOnly: true,
+                sameSite: 'lax',
+                path: '/',
+                secure: process.env.NODE_ENV === 'production',
+            },
+        },
+    },
     pages: {
         signIn: "/", // We use a modal, but fallback to home
     },

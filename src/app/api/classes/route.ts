@@ -14,6 +14,7 @@ const classSchema = z.object({
     pricePerHour: z.coerce.number().optional(),
     syllabus: z.string().optional(),
     authority: z.string().optional(),
+    authorityStandard: z.string().optional(),
 });
 
 export async function POST(req: Request) {
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
                 detailedDescription: detailedDesc,
                 type: data.type,
                 authority: data.authority,
+                authorityStandard: data.authorityStandard,
                 pricePerHour: data.price || data.pricePerHour,
                 status: "DRAFT"
             }

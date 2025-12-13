@@ -24,6 +24,19 @@ export async function createBookingAndCheckout(formData: FormData) {
 
     if (!cls) return { error: "Class not found" };
 
+    // Prevent Double Booking
+    const existing = await prisma.booking.findFirst({
+        where: {
+            classId: cls.id,
+            studentId: user.id,
+            status: { in: ["PENDING", "CONFIRMED"] }
+        }
+    });
+
+    if (existing) {
+        return { error: "You already have a pending or confirmed booking for this class." };
+    }
+
     // Create pending booking
     const booking = await prisma.booking.create({
         data: {
