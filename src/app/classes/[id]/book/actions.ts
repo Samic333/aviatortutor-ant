@@ -34,8 +34,8 @@ export async function createBookingAndCheckout(formData: FormData) {
             // So studentId IS userId. Correct.
             // instructorId: cls.instructorId, // Removed: Not in Booking Schema
             status: "PENDING",
-            price: cls.price,
-            scheduledTime: scheduledTimeStr ? new Date(scheduledTimeStr) : (cls.startDate || new Date()),
+            price: cls.fixedPrice ?? cls.pricePerHour ?? 0,
+            scheduledTime: scheduledTimeStr ? new Date(scheduledTimeStr) : new Date(),
         }
     });
 
@@ -43,9 +43,9 @@ export async function createBookingAndCheckout(formData: FormData) {
         action: "BOOKING_INITIATED",
         entityType: "Booking",
         entityId: booking.id,
-        actor: { id: user.id, role: user.role, email: user.email },
+        actor: { id: user.id, role: user.role, email: user.email ?? undefined },
         status: "SUCCESS",
-        metadata: { classId: cls.id, price: cls.price }
+        metadata: { classId: cls.id, price: cls.fixedPrice ?? cls.pricePerHour ?? 0 }
     });
 
     // Initiate Checkout
@@ -53,7 +53,7 @@ export async function createBookingAndCheckout(formData: FormData) {
         userId: user.id,
         bookingId: booking.id,
         classId: cls.id,
-        amount: Math.round(cls.price * 100), // Cents
+        amount: Math.round((cls.fixedPrice ?? cls.pricePerHour ?? 0) * 100), // Cents
         currency: "USD", // Default
         successUrl: `${process.env.NEXT_PUBLIC_APP_URL}/student/bookings/success?bookingId=${booking.id}`,
         cancelUrl: `${process.env.NEXT_PUBLIC_APP_URL}/classes/${cls.id}`,

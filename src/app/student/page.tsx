@@ -16,7 +16,8 @@ export default async function StudentDashboard() {
         completedClasses,
         upcomingBookings,
         studentProfile,
-        recommendedClasses
+        recommendedClasses,
+        extendedUser
     ] = await Promise.all([
         prisma.booking.count({
             where: { studentId: user.id, status: "COMPLETED" }
@@ -29,7 +30,10 @@ export default async function StudentDashboard() {
                 // scheduledTime: { gte: new Date() } 
             },
             take: 5,
-            include: { class: { include: { instructor: { include: { user: true } } } } },
+            include: {
+                class: { include: { instructor: { include: { user: true } } } },
+                session: true
+            },
             orderBy: { scheduledTime: 'asc' }
         }),
         prisma.studentProfile.findUnique({
@@ -40,19 +44,25 @@ export default async function StudentDashboard() {
             take: 4,
             orderBy: { createdAt: 'desc' },
             include: { instructor: { include: { user: true } } }
+        }),
+        prisma.user.findUnique({
+            where: { id: user.id }
         })
     ]);
 
     // Calculate Profile Completeness
     let score = 0;
     const missing: string[] = [];
-    if (user.name) score += 10; else missing.push("Name");
-    if (user.image) score += 20; else missing.push("Profile Photo");
-    if (user.country) score += 10; else missing.push("Country");
-    if (user.timezone) score += 10; else missing.push("Timezone");
+    const dbUser = extendedUser || user; // Fallback to session user if db fetch fails (unlikely)
+
+    if (dbUser.name) score += 10; else missing.push("Name");
+    if (dbUser.image) score += 20; else missing.push("Profile Photo");
+    // Cast to any if needed or ensure dbUser type has these fields (it should from Prisma)
+    if ((dbUser as any).country) score += 10; else missing.push("Country");
+    if ((dbUser as any).timezone) score += 10; else missing.push("Timezone");
     if (studentProfile?.targetLicense) score += 20; else missing.push("Target License");
     if (studentProfile?.goalSummary) score += 20; else missing.push("Goal Summary");
-    if (user.email) score += 10;
+    if (dbUser.email) score += 10;
 
     // Cap at 100
     if (score > 100) score = 100;

@@ -29,10 +29,7 @@ export default async function InstructorProfilePage() {
                     <CardTitle>Profile Details</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="grid gap-2">
-                        <label className="text-sm font-medium">Headline</label>
-                        <Input defaultValue={profile?.headline || ""} placeholder="e.g. A320 Captain & Instructor" disabled />
-                    </div>
+
                     <div className="grid gap-2">
                         <label className="text-sm font-medium">Bio</label>
                         <textarea

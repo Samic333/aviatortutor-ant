@@ -27,7 +27,7 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
                     <div>
                         <h1 className="text-3xl font-bold mb-2">{cls.title}</h1>
                         <div className="flex items-center gap-2 text-muted-foreground">
-                            <Badge variant="outline">{cls.category || "General"}</Badge>
+                            <Badge variant="outline">{cls.type.replace(/_/g, " ")}</Badge>
                             <span className="text-sm">•</span>
                             <div className="flex items-center text-sm">
                                 <User className="mr-1 h-4 w-4" />
@@ -38,7 +38,9 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
 
                     <div className="prose max-w-none">
                         <h3 className="text-lg font-semibold mb-2">Description</h3>
-                        <p className="whitespace-pre-wrap text-muted-foreground">{cls.description}</p>
+                        <p className="whitespace-pre-wrap text-muted-foreground">
+                            {cls.detailedDescription || cls.shortDescription || "No description provided."}
+                        </p>
                     </div>
 
                     <Card>
@@ -48,21 +50,16 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
                         <CardContent className="grid sm:grid-cols-2 gap-4 text-sm">
                             <div className="flex items-center gap-2">
                                 <Clock className="h-4 w-4 text-primary" />
-                                <span>Duration: {cls.duration ? `${cls.duration} minutes` : 'Variable'}</span>
+                                <span>Duration: 60 minutes (Est.)</span>
                             </div>
                             <div className="flex items-center gap-2">
                                 <MapPin className="h-4 w-4 text-primary" />
-                                <span>Location: {cls.location || 'Online / TBD'}</span>
+                                <span>Location: Online</span>
                             </div>
-                            {cls.startDate && (
-                                <div className="flex items-center gap-2 sm:col-span-2">
-                                    <Calendar className="h-4 w-4 text-primary" />
-                                    <span>
-                                        Date: {new Date(cls.startDate).toLocaleDateString()}
-                                        {cls.startTime && ` at ${cls.startTime}`}
-                                    </span>
-                                </div>
-                            )}
+                            <div className="flex items-center gap-2 sm:col-span-2">
+                                <Calendar className="h-4 w-4 text-primary" />
+                                <span>Schedule: Select a time during booking</span>
+                            </div>
                         </CardContent>
                     </Card>
                 </div>
@@ -75,7 +72,7 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
                         </CardHeader>
                         <CardContent className="space-y-6">
                             <div className="text-3xl font-bold text-center">
-                                ${cls.price}
+                                ${cls.fixedPrice ?? cls.pricePerHour ?? 0}
                             </div>
 
                             <Button className="w-full" size="lg" asChild>

@@ -15,7 +15,7 @@ export async function approveInstructor(instructorId: string) {
             action: "INSTRUCTOR_APPROVAL_ATTEMPT_UNAUTHORIZED",
             entityType: "InstructorProfile",
             entityId: instructorId,
-            actor: user ? { id: user.id, role: user.role, email: user.email } : null,
+            actor: user ? { id: user.id, role: user.role, email: user.email ?? undefined } : null,
             status: "FAIL",
             metadata: { reason: "Unauthorized Role" }
         });
@@ -35,7 +35,7 @@ export async function approveInstructor(instructorId: string) {
             entityType: "InstructorProfile",
             entityId: instructorId,
             targetUserId: instructor.userId,
-            actor: { id: user.id, role: user.role, email: user.email },
+            actor: { id: user.id, role: user.role, email: user.email ?? undefined },
             status: "SUCCESS"
         });
 

@@ -35,7 +35,7 @@ export async function sendMessage(conversationId: string, content: string) {
             action: "MESSAGE_SENT",
             entityType: "Message",
             entityId: message.id,
-            actor: { id: user.id, role: user.role, email: user.email },
+            actor: { id: user.id, role: user.role, email: user.email ?? undefined },
             status: "SUCCESS",
             metadata: { conversationId }
         });

@@ -60,7 +60,7 @@ export default async function AdminInstructorsPage() {
                                     </CardHeader>
                                     <CardContent>
                                         <div className="space-y-2">
-                                            <p className="text-sm"><strong>Headline:</strong> {instructor.headline || "N/A"}</p>
+
                                             <p className="text-sm"><strong>Authorities:</strong> {instructor.authorities.join(", ") || "None"}</p>
                                             <p className="text-sm"><strong>Bio:</strong> {instructor.bio?.substring(0, 150)}...</p>
                                             <div className="flex gap-2 mt-4">

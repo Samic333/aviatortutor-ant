@@ -68,7 +68,7 @@ export async function POST(req: Request) {
             action: "USER_REGISTERED",
             entityType: "User",
             entityId: user.id,
-            actor: { id: user.id, role: user.role, email: user.email }, // Self-registered
+            actor: { id: user.id, role: user.role, email: user.email ?? undefined }, // Self-registered
             status: "SUCCESS",
             metadata: { role: user.role }
         });

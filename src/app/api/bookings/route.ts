@@ -44,7 +44,7 @@ export async function POST(req: Request) {
             action: "BOOKING_CREATED_API",
             entityType: "Booking",
             entityId: booking.id,
-            actor: { id: user.id, role: user.role, email: user.email },
+            actor: { id: user.id, role: user.role, email: user.email ?? undefined },
             status: "SUCCESS",
             metadata: { classId: classId, method: "API_DIRECT" }
         });

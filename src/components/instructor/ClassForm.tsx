@@ -17,14 +17,15 @@ const classSchema = z.object({
     detailedDescription: z.string().optional(),
     type: z.enum(["ONE_ON_ONE", "GROUP", "CHAT"]),
     authority: z.string().min(1, "Please select an authority"),
-    pricePerHour: z.preprocess((a) => parseFloat(a as string), z.number().min(0)),
+    authorityStandard: z.string().optional(),
+    pricePerHour: z.coerce.number().min(0, "Price must be non-negative"),
     syllabus: z.string().optional(),
 });
 
 type ClassFormValues = z.infer<typeof classSchema>;
 
 interface ClassFormProps {
-    initialData?: any; // strict type would be better, but 'any' or Partial<Class> is fine for now
+    initialData?: any;
     classId?: string;
 }
 
@@ -35,15 +36,16 @@ export function ClassForm({ initialData, classId }: ClassFormProps) {
     const isEditing = !!initialData;
 
     const { register, handleSubmit, formState: { errors } } = useForm<ClassFormValues>({
-        resolver: zodResolver(classSchema),
+        resolver: zodResolver(classSchema) as any,
         defaultValues: initialData ? {
             title: initialData.title,
-            shortDescription: initialData.description,
+            shortDescription: initialData.shortDescription || "",
             detailedDescription: initialData.detailedDescription || "",
             type: initialData.type,
             authority: initialData.authority,
-            pricePerHour: initialData.price,
-            syllabus: initialData.syllabus || "",
+            authorityStandard: initialData.authorityStandard || "",
+            pricePerHour: initialData.pricePerHour ?? initialData.fixedPrice ?? 0,
+            syllabus: "", // Field exists in form but maybe mapped to detailedDescription or ignored?
         } : {
             type: "ONE_ON_ONE",
             pricePerHour: 0
@@ -58,12 +60,13 @@ export function ClassForm({ initialData, classId }: ClassFormProps) {
 
             const payload = {
                 title: data.title,
-                description: data.shortDescription,
-                detailedDescription: data.detailedDescription,
+                shortDescription: data.shortDescription,
+                detailedDescription: data.detailedDescription + (data.syllabus ? `\n\nSyllabus:\n${data.syllabus}` : ""),
                 type: data.type,
                 authority: data.authority,
-                price: data.pricePerHour,
-                syllabus: data.syllabus,
+                authorityStandard: data.authorityStandard,
+                pricePerHour: data.pricePerHour,
+                // syllabus field removed from payload as not in schema, merged into description above
             };
 
             const res = await fetch(url, {

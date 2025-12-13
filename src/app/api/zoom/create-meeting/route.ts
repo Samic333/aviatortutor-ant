@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
             data: {
                 zoomMeetingId: meeting.meetingId,
                 zoomJoinUrl: meeting.joinUrl,
-                zoomHostUrl: meeting.hostUrl,
+                zoomStartUrl: meeting.hostUrl,
                 zoomPassword: meeting.password
             }
         });
