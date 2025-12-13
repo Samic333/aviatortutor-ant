@@ -39,7 +39,11 @@ export async function POST(req: NextRequest) {
         }
 
         const provider = getPaymentProvider();
-        const origin = req.headers.get("origin") || "http://localhost:3000";
+        const origin = process.env.NEXTAUTH_URL || process.env.APP_URL || (process.env.NODE_ENV === "development" ? "http://localhost:3000" : "");
+        if (!origin) {
+            console.error("[Checkout] Error: NEXTAUTH_URL or APP_URL not set");
+            return NextResponse.json({ error: "Configuration error" }, { status: 500 });
+        }
 
         const result = await provider.createCheckoutSession({
             userId: session.user.id,
