@@ -20,40 +20,45 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" },
             },
             async authorize(credentials) {
-                console.log("[Auth] Authorize called:", credentials?.email);
-                if (!credentials?.email || !credentials?.password) {
-                    console.log("[Auth] Missing credentials");
+                try {
+                    // console.log("[Auth] Authorize called:", credentials?.email);
+                    if (!credentials?.email || !credentials?.password) {
+                        return null;
+                    }
+
+                    const user = await prisma.user.findUnique({
+                        where: {
+                            email: credentials.email,
+                        },
+                    });
+
+                    // console.log("[Auth] User found:", user ? user.email : "Not found");
+
+                    if (!user || !user.passwordHash) {
+                        return null;
+                    }
+
+                    const isValid = await bcrypt.compare(
+                        credentials.password,
+                        user.passwordHash
+                    );
+
+                    // console.log("[Auth] Password valid:", isValid);
+
+                    if (!isValid) {
+                        return null;
+                    }
+
+                    return {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email,
+                        role: user.role,
+                    };
+                } catch (error) {
+                    console.error("[Auth] Authorize error:", error);
                     return null;
                 }
-
-                const user = await prisma.user.findUnique({
-                    where: {
-                        email: credentials.email,
-                    },
-                });
-                console.log("[Auth] User found:", user ? user.email : "Not found");
-                if (!user || !user.passwordHash) {
-                    console.log("[Auth] User invalid or no password hash");
-                    return null;
-                }
-
-                const isValid = await bcrypt.compare(
-                    credentials.password,
-                    user.passwordHash
-                );
-                console.log("[Auth] Password valid:", isValid);
-                if (!isValid) {
-                    console.log("[Auth] Password mismatch");
-                    return null;
-                }
-                console.log("[Auth] Authorization successful");
-
-                return {
-                    id: user.id,
-                    name: user.name,
-                    email: user.email,
-                    role: user.role,
-                };
             },
         }),
     ],
