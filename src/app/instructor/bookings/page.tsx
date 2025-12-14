@@ -3,6 +3,7 @@ import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
+import { BookingActions } from "@/components/instructor/BookingActions";
 
 export default async function InstructorBookingsPage() {
     const user = await getCurrentUser();
@@ -58,9 +59,12 @@ export default async function InstructorBookingsPage() {
                                                 {booking.scheduledTime ? new Date(booking.scheduledTime).toLocaleString() : "Unscheduled"}
                                             </td>
                                             <td className="px-4 py-3">
-                                                <Badge variant={booking.status === "CONFIRMED" ? "default" : "secondary"}>
-                                                    {booking.status}
-                                                </Badge>
+                                                <div className="flex items-center gap-2">
+                                                    <Badge variant={booking.status === "CONFIRMED" ? "default" : "secondary"}>
+                                                        {booking.status}
+                                                    </Badge>
+                                                    <BookingActions bookingId={booking.id} currentStatus={booking.status} />
+                                                </div>
                                             </td>
                                             <td className="px-4 py-3">
                                                 <Badge variant="outline">{booking.paymentStatus}</Badge>

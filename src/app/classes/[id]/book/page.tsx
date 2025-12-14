@@ -2,12 +2,9 @@ import prisma from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { Calendar, Clock } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { createBookingAndCheckout } from "./actions";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Clock } from "lucide-react";
+import { BookingForm } from "./BookingForm";
 
 export default async function BookingPage({ params }: { params: { id: string } }) {
     const user = await getCurrentUser();
@@ -22,7 +19,6 @@ export default async function BookingPage({ params }: { params: { id: string } }
 
     if (!cls) notFound();
 
-    // Always require time selection for now as Class doesn't have a specific startDate in schema
     const price = cls.fixedPrice ?? cls.pricePerHour ?? 0;
 
     return (
@@ -47,30 +43,7 @@ export default async function BookingPage({ params }: { params: { id: string } }
                         </div>
                     </div>
 
-                    <form action={createBookingAndCheckout as any}>
-                        <input type="hidden" name="classId" value={cls.id} />
-
-                        <div className="space-y-2 mb-4">
-                            <Label htmlFor="scheduledTime">Requested Date & Time</Label>
-                            <Input
-                                type="datetime-local"
-                                name="scheduledTime"
-                                id="scheduledTime"
-                                required
-                                className="w-full"
-                            />
-                        </div>
-
-                        <div className="pt-4 border-t">
-                            <div className="flex justify-between items-center mb-4">
-                                <span>Total</span>
-                                <span className="font-bold text-xl">${price}</span>
-                            </div>
-                            <Button type="submit" className="w-full" size="lg">
-                                Proceed to Payment
-                            </Button>
-                        </div>
-                    </form>
+                    <BookingForm classId={cls.id} price={price} />
                 </CardContent>
             </Card>
         </div>

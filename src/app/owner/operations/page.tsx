@@ -91,25 +91,14 @@ export default async function OwnerOperationsPage() {
                 </div>
             </div>
 
-            <div className="bg-slate-800/50 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6">
+            <div className="bg-slate-800/50 backdrop-blur-sm border border-orange-500/20 rounded-lg p-6 opacity-50">
                 <h2 className="text-xl font-bold mb-4 text-orange-400 flex items-center gap-2">
                     <AlertTriangle className="h-5 w-5" />
-                    EMERGENCY CONTROLS
+                    EMERGENCY CONTROLS (Coming Soon)
                 </h2>
-                <div className="grid gap-4 md:grid-cols-3">
-                    <button className="bg-red-600/20 hover:bg-red-600/30 border border-red-500/50 rounded-lg p-4 text-left transition-all">
-                        <div className="font-bold text-red-400 mb-1">Platform Lockdown</div>
-                        <div className="text-xs text-red-300/70">Disable all user access</div>
-                    </button>
-                    <button className="bg-yellow-600/20 hover:bg-yellow-600/30 border border-yellow-500/50 rounded-lg p-4 text-left transition-all">
-                        <div className="font-bold text-yellow-400 mb-1">Maintenance Mode</div>
-                        <div className="text-xs text-yellow-300/70">Enable maintenance banner</div>
-                    </button>
-                    <button className="bg-orange-600/20 hover:bg-orange-600/30 border border-orange-500/50 rounded-lg p-4 text-left transition-all">
-                        <div className="font-bold text-orange-400 mb-1">Force Backup</div>
-                        <div className="text-xs text-orange-300/70">Trigger system backup</div>
-                    </button>
-                </div>
+                <p className="text-sm text-orange-300/60">
+                    Advanced system controls are currently disabled for safety.
+                </p>
             </div>
         </div>
     );

@@ -17,18 +17,16 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
 
     if (!cls) notFound();
 
-    const user = await getCurrentUser(); // Imported from "@/lib/session" implicitly or need to import? 
-    // Wait, getCurrentUser is not imported in original snippet. Need to add valid import.
-    // But first, let's just use the logic replacement.
+    const user = await getCurrentUser();
 
     let backLink = "/classes";
     let backLabel = "Back to Classes";
 
     if (user) {
-        if (user.role === "INSTRUCTOR") {
+        if (user.role === "INSTRUCTOR" && cls.instructor.userId === user.id) {
             backLink = "/instructor/classes";
             backLabel = "Back to My Classes";
-        } else if (user.role === "ADMIN" || user.role === "SUPER_ADMIN") {
+        } else if (user.role === "ADMIN" || user.role === "SUPER_ADMIN" || user.role === "OWNER") {
             backLink = "/admin/classes";
             backLabel = "Back to Admin Classes";
         }

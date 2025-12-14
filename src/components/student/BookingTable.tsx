@@ -60,7 +60,8 @@ export function BookingTable({ bookings }: BookingTableProps) {
                                     </Link>
                                 </Button>
                                 {booking.status !== "CANCELLED" && (
-                                    <Button variant="ghost" size="icon" title="Message Instructor">
+                                    /* Messaging disabled for now */
+                                    <Button variant="ghost" size="icon" title="Message Instructor" disabled className="opacity-50 cursor-not-allowed">
                                         <MessageSquare className="h-4 w-4" />
                                     </Button>
                                 )}

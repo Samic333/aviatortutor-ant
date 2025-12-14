@@ -56,6 +56,14 @@ export default async function InstructorDashboardPage() {
     }
 
     // Stats
+    // Check profile completeness
+    const isProfileComplete = !!(
+        instructorProfile.bio &&
+        instructorProfile.hourlyRateDefault &&
+        instructorProfile.aircraftTypes.length > 0
+    );
+
+    // Calculate Earnings (Mock or Real)
     const totalEarnings = 0; // TODO: Calculate from bookings
     const upcomingSessionsResult = await prisma.booking.findMany({
         where: {
@@ -73,13 +81,15 @@ export default async function InstructorDashboardPage() {
     });
 
     const rating = instructorProfile.rating || 0;
-    const isProfileComplete = !!(instructorProfile.bio && instructorProfile.yearsOfExperience && instructorProfile.hourlyRateDefault);
+    // The original code had a duplicate declaration of isProfileComplete.
+    // Keeping the more comprehensive one from above.
+    // const isProfileComplete = !!(instructorProfile.bio && instructorProfile.yearsOfExperience && instructorProfile.hourlyRateDefault);
 
     return (
         <div className="space-y-8">
             {!isProfileComplete && <CompleteProfileBanner role="INSTRUCTOR" />}
-            <div className="flex items-center justify-between">
-                <h2 className="text-3xl font-bold tracking-tight">Instructor Dashboard</h2>
+            <div className="flex justify-between items-center">
+                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
                 <div className="flex gap-2">
                     <Button asChild>
                         <Link href="/instructor/classes/new">
