@@ -90,6 +90,12 @@ function SignInContent() {
                         </p>
                     </div>
 
+                    {searchParams?.get("error") && (
+                        <div className="bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm p-3 rounded-md mb-4 flex items-center gap-2 border border-red-200 dark:border-red-900">
+                            <p>{searchParams.get("error") === "Callback" ? "Authentication provider error." : "Authentication failed. Please check your credentials."}</p>
+                        </div>
+                    )}
+
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>

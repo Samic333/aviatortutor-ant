@@ -1,30 +1,12 @@
-import { getCurrentUser } from "@/lib/session";
-import { redirect } from "next/navigation";
-import { getSystemSettings } from "./actions";
-import { PlatformSettingsForm } from "@/components/super-admin/PlatformSettingsForm";
+import PlaceholderPage from "@/components/shared/PlaceholderPage";
 
-export default async function SuperAdminSettingsPage() {
-    const user = await getCurrentUser();
-    if (!user) redirect("/");
-
-    const settings = await getSystemSettings();
-
-    // Default fallback if DB fetch fails or no settings yet
-    const initialSettings = settings || {
-        platformName: "AviatorTutor",
-        supportEmail: "support@aviatortutor.com",
-        defaultCurrency: "USD",
-        maintenanceMode: false
-    };
-
+export default function PlatformSettingsPage() {
     return (
-        <div className="space-y-6">
-            <PlatformSettingsForm initialSettings={{
-                platformName: initialSettings.platformName,
-                supportEmail: initialSettings.supportEmail,
-                defaultCurrency: initialSettings.defaultCurrency,
-                maintenanceMode: initialSettings.maintenanceMode
-            }} />
-        </div>
+        <PlaceholderPage
+            title="Platform Settings"
+            description="Configure global system parameters, email templates, and integrations."
+            backLink="/super-admin"
+            backLabel="Back to Dashboard"
+        />
     );
 }

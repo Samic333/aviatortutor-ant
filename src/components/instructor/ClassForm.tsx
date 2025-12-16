@@ -38,14 +38,14 @@ export function ClassForm({ initialData, classId }: ClassFormProps) {
     const { register, handleSubmit, formState: { errors } } = useForm<ClassFormValues>({
         resolver: zodResolver(classSchema) as any,
         defaultValues: initialData ? {
-            title: initialData.title,
+            title: initialData.title || "",
             shortDescription: initialData.shortDescription || "",
             detailedDescription: initialData.detailedDescription || "",
-            type: initialData.type,
-            authority: initialData.authority,
+            type: initialData.type || "ONE_ON_ONE",
+            authority: initialData.authority || "",
             authorityStandard: initialData.authorityStandard || "",
             pricePerHour: initialData.pricePerHour ?? initialData.fixedPrice ?? 0,
-            syllabus: "", // Field exists in form but maybe mapped to detailedDescription or ignored?
+            syllabus: "",
         } : {
             type: "ONE_ON_ONE",
             pricePerHour: 0

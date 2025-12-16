@@ -59,7 +59,7 @@ export default async function InstructorDashboardPage() {
     // Check profile completeness
     const isProfileComplete = !!(
         instructorProfile.bio &&
-        instructorProfile.hourlyRateDefault &&
+        instructorProfile.hourlyRateDefault !== null &&
         instructorProfile.aircraftTypes.length > 0
     );
 
