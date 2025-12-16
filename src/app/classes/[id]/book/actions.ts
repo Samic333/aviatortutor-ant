@@ -68,8 +68,7 @@ export async function createBookingAndCheckout(formData: FormData) {
         where: { id: booking.id },
         data: {
             status: "CONFIRMED",
-            paymentStatus: "PAID",
-            paymentId: "temp_bypass_" + Date.now()
+            paymentStatus: "PAID"
         }
     });
 
