@@ -23,7 +23,10 @@ export default async function ClassDetailsPage({ params }: { params: { id: strin
     let backLabel = "Back to Classes";
 
     if (user) {
-        if (user.role === "INSTRUCTOR" && cls.instructor.userId === user.id) {
+        if (user.role === "STUDENT") {
+            backLink = "/student/browse-instructors";
+            backLabel = "Back to Browse";
+        } else if (user.role === "INSTRUCTOR") {
             backLink = "/instructor/classes";
             backLabel = "Back to My Classes";
         } else if (user.role === "ADMIN" || user.role === "SUPER_ADMIN" || user.role === "OWNER") {

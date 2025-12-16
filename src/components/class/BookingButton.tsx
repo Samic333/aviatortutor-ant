@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface BookingButtonProps {
     classId: string;
@@ -37,10 +38,14 @@ export function BookingButton({ classId, userId, userRole, isAvailable, price }:
             }
 
             const data = await res.json();
-            // Redirect to booking success or payment stub
-            alert("Booking request sent! (Stub)");
-            setIsOpen(false);
-            router.push("/student/bookings");
+
+            if (data.id) {
+                toast.success("Booking initiated! Redirecting to payment...");
+                setIsOpen(false);
+                router.push(`/student/bookings/${data.id}/payment`);
+            } else {
+                throw new Error("No booking ID returned");
+            }
 
         } catch (error) {
             console.error(error);

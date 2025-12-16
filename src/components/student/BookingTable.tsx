@@ -47,13 +47,32 @@ export function BookingTable({ bookings }: BookingTableProps) {
                                 )}
                             </td>
                             <td className="px-4 py-3">
-                                <Badge
-                                    variant={booking.status === "CONFIRMED" ? "default" : booking.status === "COMPLETED" ? "secondary" : booking.status === "CANCELLED" ? "destructive" : "outline"}
-                                >
-                                    {booking.status}
-                                </Badge>
+                                <div className="flex flex-col gap-1 items-start">
+                                    <Badge
+                                        variant={booking.status === "CONFIRMED" ? "default" : booking.status === "COMPLETED" ? "secondary" : booking.status === "CANCELLED" ? "destructive" : "outline"}
+                                    >
+                                        {booking.status}
+                                    </Badge>
+                                    {booking.paymentStatus === "PAID" && (
+                                        <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50 text-[10px]">
+                                            Paid
+                                        </Badge>
+                                    )}
+                                    {booking.paymentStatus === "PENDING" && booking.status !== "CANCELLED" && (
+                                        <Badge variant="outline" className="text-yellow-600 border-yellow-200 bg-yellow-50 text-[10px]">
+                                            Payment Pending
+                                        </Badge>
+                                    )}
+                                </div>
                             </td>
                             <td className="px-4 py-3 text-right flex items-center justify-end gap-2 md:table-cell">
+                                {booking.paymentStatus === "PENDING" && booking.status !== "CANCELLED" && (
+                                    <Button size="sm" className="bg-green-600 hover:bg-green-700 text-white h-8" asChild>
+                                        <Link href={`/student/bookings/${booking.id}/payment`}>
+                                            Pay Now
+                                        </Link>
+                                    </Button>
+                                )}
                                 <Button variant="ghost" size="icon" title="View Details" asChild>
                                     <Link href={`/student/bookings/${booking.id}`}>
                                         <Eye className="h-4 w-4" />

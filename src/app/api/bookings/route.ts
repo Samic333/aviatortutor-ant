@@ -32,8 +32,8 @@ export async function POST(req: Request) {
             data: {
                 classId,
                 studentId: user.id,
-                status: "CONFIRMED", // Auto-confirm for now (or PENDING if we had payment flow)
-                paymentStatus: "PAID", // Stub payment
+                status: "PENDING",
+                paymentStatus: "PENDING",
                 price: classItem.fixedPrice || classItem.pricePerHour || 0,
                 currency: "USD",
                 scheduledTime: new Date(Date.now() + 1000 * 60 * 60 * 24), // Stub: tomorrow
@@ -41,15 +41,15 @@ export async function POST(req: Request) {
         });
 
         await logAuditAction({
-            action: "BOOKING_CREATED_API",
+            action: "BOOKING_INITIATED",
             entityType: "Booking",
             entityId: booking.id,
             actor: { id: user.id, role: user.role, email: user.email ?? undefined },
             status: "SUCCESS",
-            metadata: { classId: classId, method: "API_DIRECT" }
+            metadata: { classId: classId }
         });
 
-        return NextResponse.json(booking, { status: 201 });
+        return NextResponse.json({ id: booking.id, message: "Booking initiated. Please complete payment." }, { status: 201 });
 
     } catch (error) {
         console.error(error);

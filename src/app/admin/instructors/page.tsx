@@ -95,7 +95,9 @@ export default async function AdminInstructorsPage() {
                                             <td className="px-4 py-3">{instructor._count.classes}</td>
                                             <td className="px-4 py-3">{instructor.rating.toFixed(1)}</td>
                                             <td className="px-4 py-3">
-                                                <Button size="sm" variant="ghost">View</Button>
+                                                <Button size="sm" variant="ghost" asChild>
+                                                    <a href={`/admin/users/${instructor.userId}`}>View</a>
+                                                </Button>
                                             </td>
                                         </tr>
                                     ))}

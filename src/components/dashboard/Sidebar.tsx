@@ -34,7 +34,7 @@ export function Sidebar({ role }: SidebarProps) {
                 { href: "/instructor/classes", label: "My Classes", icon: BookOpen },
                 { href: "/instructor/bookings", label: "Schedule", icon: Calendar },
                 { href: "/instructor/earnings", label: "Earnings", icon: CreditCard },
-                { href: "/instructor/messages", label: "Messages", icon: FileText }, // Using FileText for now as MessageSquare clashes? Or just standard icon
+                // { href: "/instructor/messages", label: "Messages", icon: FileText }, // Using FileText for now as MessageSquare clashes? Or just standard icon
                 { href: "/instructor/profile", label: "Profile", icon: Settings },
                 { href: "/instructor/support", label: "Support", icon: LifeBuoy },
             ]

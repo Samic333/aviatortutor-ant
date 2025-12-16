@@ -56,8 +56,44 @@ export async function approveInstructor(instructorId: string) {
 }
 
 export async function rejectInstructor(instructorId: string) {
-    // For now, rejection just leaves them pending or could delete. 
-    // Implementing a soft reject that notifications them?
-    // Let's just return not implemented or do nothing for now to be safe.
-    return { success: false, error: "Rejection not implemented yet" };
+    const user = await getCurrentUser();
+    if (!user || !["ADMIN", "SUPER_ADMIN", "OWNER"].includes(user.role)) {
+        return { success: false, error: "Unauthorized" };
+    }
+
+    try {
+        const instructor = await prisma.instructorProfile.findUnique({
+            where: { id: instructorId },
+            include: { user: true }
+        });
+
+        if (!instructor) return { success: false, error: "Instructor not found" };
+
+        // For this temporary flow, 'Reject' will just notify them to update details.
+        // In a real app, we might have a 'Rejected' status enum.
+
+        await createNotification({
+            userId: instructor.userId,
+            type: "SYSTEM", // Using generic system type
+            title: "Application Requires Update",
+            body: "Your instructor application was reviewed but needs more details. Please update your profile.",
+            link: "/instructor/profile"
+        });
+
+        await logAuditAction({
+            action: "INSTRUCTOR_REJECTED",
+            entityType: "InstructorProfile",
+            entityId: instructorId,
+            targetUserId: instructor.userId,
+            actor: { id: user.id, role: user.role, email: user.email ?? undefined },
+            status: "SUCCESS",
+            metadata: { note: "Soft rejection/Request for info" }
+        });
+
+        revalidatePath("/admin/instructors");
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to reject instructor:", error);
+        return { success: false, error: "Failed to reject instructor" };
+    }
 }

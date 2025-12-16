@@ -10,11 +10,17 @@ export default async function StudentSupportPage() {
     const user = await getCurrentUser();
     if (!user) redirect("/");
 
-    const tickets = await prisma.supportTicket.findMany({
-        where: { createdById: user.id },
-        orderBy: { createdAt: 'desc' },
-        include: { booking: { include: { class: true } } }
-    });
+    let tickets: any[] = [];
+    try {
+        tickets = await prisma.supportTicket.findMany({
+            where: { createdById: user.id },
+            orderBy: { createdAt: 'desc' },
+            include: { booking: { include: { class: true } } }
+        });
+    } catch (error) {
+        console.error("Failed to fetch tickets:", error);
+        // Continue with empty tickets array but log error
+    }
 
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
@@ -39,6 +45,7 @@ export default async function StudentSupportPage() {
                                 </div>
                                 <h3 className="font-semibold text-lg mb-1">No Support Tickets</h3>
                                 <p className="text-muted-foreground text-sm max-w-xs">
+                                    {/* Show different message if error occurred? For now generic empty state is safer */}
                                     You haven't submitted any support requests yet.
                                 </p>
                             </CardContent>

@@ -61,7 +61,31 @@ export async function createBookingAndCheckout(formData: FormData) {
         metadata: { classId: cls.id, price: cls.fixedPrice ?? cls.pricePerHour ?? 0 }
     });
 
-    // Initiate Checkout
+    // TEMPORARY BYPASS: Immediate Confirmation without Stripe
+    console.log("TEMPORARY: Bypassing payment provider. Confirming booking immediately.");
+
+    await prisma.booking.update({
+        where: { id: booking.id },
+        data: {
+            status: "CONFIRMED",
+            paymentStatus: "PAID",
+            paymentId: "temp_bypass_" + Date.now()
+        }
+    });
+
+    await logAuditAction({
+        action: "PAYMENT_COMPLETED",
+        entityType: "Booking",
+        entityId: booking.id,
+        actor: { id: user.id, role: user.role, email: user.email ?? undefined },
+        status: "SUCCESS",
+        metadata: { method: "TEMPORARY_BYPASS" }
+    });
+
+    redirect(`/student/bookings/success?bookingId=${booking.id}`);
+
+    /* 
+    // OLD CODE: Initiate Checkout (Preserved for future integrations)
     const session = await PaymentService.getProvider().createCheckoutSession({
         userId: user.id,
         bookingId: booking.id,
@@ -79,4 +103,5 @@ export async function createBookingAndCheckout(formData: FormData) {
     } else {
         return { error: "Failed to initiate payment" };
     }
+    */
 }

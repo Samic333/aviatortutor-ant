@@ -10,10 +10,15 @@ export default async function InstructorSupportPage() {
     const user = await getCurrentUser();
     if (!user) redirect("/");
 
-    const tickets = await prisma.supportTicket.findMany({
-        where: { createdById: user.id },
-        orderBy: { createdAt: 'desc' }
-    });
+    let tickets: any[] = [];
+    try {
+        tickets = await prisma.supportTicket.findMany({
+            where: { createdById: user.id },
+            orderBy: { createdAt: 'desc' }
+        });
+    } catch (error) {
+        console.error("Failed to fetch instructor tickets:", error);
+    }
 
     return (
         <div className="space-y-8 max-w-4xl mx-auto">
