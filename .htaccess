@@ -11,12 +11,5 @@
 # Security: Disable directory listing (Commented out if forbidden by host)
 # Options -Indexes
 
-# PHP Settings for shared hosting (optional, can be adjusted)
-<IfModule mod_php7.c>
-    php_value upload_max_filesize 64M
-    php_value post_max_size 64M
-</IfModule>
-<IfModule mod_php.c>
-    php_value upload_max_filesize 64M
-    php_value post_max_size 64M
-</IfModule>
+# Security: Disable directory listing (Commented out if forbidden by host)
+# Options -Indexes
