@@ -94,7 +94,7 @@ ob_start();
                         name="q"
                         placeholder="Search by name, aircraft, or bio..."
                         class="flex h-12 w-full rounded-md border border-input bg-background px-11 py-2 text-lg shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                        value="<?php echo htmlspecialchars($queryParam); ?>"
+                        value="<?php echo htmlspecialchars($queryParam ?? ''); ?>"
                     />
                 </form>
             </div>
@@ -107,7 +107,7 @@ ob_start();
             <div class="lg:sticky lg:top-24 rounded-lg border bg-card/50 p-6 backdrop-blur-sm shadow-sm">
                 <form action="/instructors" method="GET" class="space-y-6">
                     <?php if ($queryParam): ?>
-                        <input type="hidden" name="q" value="<?php echo htmlspecialchars($queryParam); ?>">
+                        <input type="hidden" name="q" value="<?php echo htmlspecialchars($queryParam ?? ''); ?>">
                     <?php endif; ?>
                     
                     <div class="space-y-4">

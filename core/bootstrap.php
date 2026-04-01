@@ -6,6 +6,11 @@
 // Include Config
 require_once __DIR__ . '/../config/config.php';
 
+// Check for required extensions
+if (!extension_loaded('pdo_mysql')) {
+    die("Error: The 'pdo_mysql' PHP extension is required. Please enable it in your cPanel PHP selector.");
+}
+
 // Simple Autoloader (Replaces Composer Autoload for now)
 spl_autoload_register(function ($class) {
     // Map namespace to directory

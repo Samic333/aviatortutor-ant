@@ -49,7 +49,7 @@ ob_start();
         </div>
         <div class="relative">
             <div class="aspect-video rounded-2xl bg-muted overflow-hidden shadow-2xl">
-                 <img src="/hero-bg.png" alt="Aviation Training" class="object-cover w-full h-full">
+                 <img src="/assets/img/hero-bg.png" alt="Aviation Training" class="object-cover w-full h-full">
             </div>
             <div class="absolute -bottom-6 -left-6 bg-primary text-primary-foreground p-8 rounded-2xl shadow-xl hidden lg:block">
                 <div class="text-4xl font-bold">10k+</div>
