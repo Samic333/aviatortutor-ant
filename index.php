@@ -4,7 +4,7 @@
  * AviatorTutor PHP Front Controller
  */
 
-require_once __DIR__ . '/../core/bootstrap.php';
+require_once __DIR__ . '/core/bootstrap.php';
 
 use App\Lib\Auth;
 use App\Lib\Database;
