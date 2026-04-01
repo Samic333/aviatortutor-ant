@@ -8,8 +8,8 @@
     RewriteRule ^(.*)$ index.php [L,QSA]
 </IfModule>
 
-# Security: Disable directory listing
-Options -Indexes
+# Security: Disable directory listing (Commented out if forbidden by host)
+# Options -Indexes
 
 # PHP Settings for shared hosting (optional, can be adjusted)
 <IfModule mod_php7.c>
