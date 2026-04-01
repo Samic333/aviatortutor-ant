@@ -1,5 +1,0 @@
-npm error code EJSONPARSE
-npm error JSON.parse Invalid package.json: JSONParseError: Unexpected end of JSON input while parsing empty string
-npm error JSON.parse Failed to parse JSON data.
-npm error JSON.parse Note: package.json must be actual JSON, not just JavaScript.
-npm error A complete log of this run can be found in: /Users/samic/.npm/_logs/2025-12-07T11_27_14_435Z-debug-0.log
