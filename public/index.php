@@ -4,7 +4,7 @@
  * AviatorTutor PHP Front Controller
  */
 
-require_once __DIR__ . '/../app/bootstrap.php';
+require_once __DIR__ . '/../core/bootstrap.php';
 
 use App\Lib\Auth;
 use App\Lib\Database;
@@ -23,7 +23,7 @@ $routes = [
     '/instructors' => 'views/instructors.php',
     '/login' => 'views/auth/login.php',
     '/register' => 'views/auth/register.php',
-    '/logout' => 'app/actions/logout.php',
+    '/logout' => 'core/actions/logout.php',
     '/student' => 'views/student/dashboard.php',
     '/student/bookings' => 'views/student/bookings.php',
     '/student/tickets' => 'views/student/tickets.php',
@@ -42,17 +42,17 @@ $routes = [
 
 // Action Routes (POST)
 $postRoutes = [
-    '/login' => 'app/actions/login.php',
-    '/register' => 'app/actions/register.php',
-    '/contact/send' => 'app/actions/contact.php',
-    '/instructor/classes/create' => 'app/actions/create_class.php',
-    '/instructor/classes/update' => 'app/actions/update_class.php',
-    '/instructor/profile/update' => 'app/actions/update_instructor_profile.php',
-    '/student/profile/update' => 'app/actions/update_student_profile.php',
-    '/bookings/create' => 'app/actions/create_booking.php',
-    '/admin/user/approve' => 'app/actions/admin_user_action.php',
-    '/admin/user/delete' => 'app/actions/admin_user_action.php',
-    '/admin/tickets/action' => 'app/actions/ticket_action.php',
+    '/login' => 'core/actions/login.php',
+    '/register' => 'core/actions/register.php',
+    '/contact/send' => 'core/actions/contact.php',
+    '/instructor/classes/create' => 'core/actions/create_class.php',
+    '/instructor/classes/update' => 'core/actions/update_class.php',
+    '/instructor/profile/update' => 'core/actions/update_instructor_profile.php',
+    '/student/profile/update' => 'core/actions/update_student_profile.php',
+    '/bookings/create' => 'core/actions/create_booking.php',
+    '/admin/user/approve' => 'core/actions/admin_user_action.php',
+    '/admin/user/delete' => 'core/actions/admin_user_action.php',
+    '/admin/tickets/action' => 'core/actions/ticket_action.php',
 ];
 
 if ($method === 'POST' && isset($postRoutes[$path])) {
