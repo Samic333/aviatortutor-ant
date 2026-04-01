@@ -1,9 +1,7 @@
 # PHP / Shared Hosting GitIgnore
 # Config and Secrets
-config/config.php
 .env
 .env.backup
-.env.example
 .DS_Store
 
 # Logs
