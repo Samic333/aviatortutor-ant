@@ -26,10 +26,7 @@ spl_autoload_register(function ($class) {
     $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
     
     if (file_exists($file)) {
-        error_log("Autoloader loading: " . $file);
         require_once $file;
-    } else {
-        error_log("Autoloader failed to find: " . $file);
     }
 });
 

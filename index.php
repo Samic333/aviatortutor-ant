@@ -1,7 +1,7 @@
 <?php
-// Enable full error reporting for production debugging on Namecheap/cPanel
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Disable direct display of errors for production safety (log them instead)
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 
 /**

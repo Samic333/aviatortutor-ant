@@ -32,8 +32,7 @@ ob_start();
     <!-- Hero Section -->
     <section class="relative h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         <div class="absolute inset-0 z-0">
-            <!-- Note: Using a placeholder if the original asset isn't found, but keeping the logic -->
-            <div class="absolute inset-0 bg-slate-900 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105" style="background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109a33e?q=80&w=2074&auto=format&fit=crop');"></div>
+            <div class="absolute inset-0 bg-slate-900 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105" style="background-image: url('/assets/img/hero-bg.png');"></div>
             <div class="absolute inset-0 bg-blue-900/10 mix-blend-overlay"></div>
             <div class="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60"></div>
         </div>
